@@ -6,9 +6,9 @@ using System.IO;
 
 namespace Infrastructure
 {
-    class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-  
+        public string CurrentUserId { get; set; }
         public DbSet<Fund> Funds { get; set; }
         public DbSet<Management> Managements { get; set; }
 
@@ -20,7 +20,7 @@ namespace Infrastructure
         IHostingEnvironment _hostingEnvironment;
         private string _contentDirectoryPath = "";
 
-        public void PortfolioContext(IHostingEnvironment environment)
+        public  ApplicationDbContext(IHostingEnvironment environment)
         {
             _hostingEnvironment = environment;
             _contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "App_Data", "portfolio.db");

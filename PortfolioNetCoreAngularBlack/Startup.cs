@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using Core;
+using Infrastructure;
 
 namespace PortfolioNetCoreAngularBlack
 {
@@ -28,15 +29,20 @@ namespace PortfolioNetCoreAngularBlack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<Infrastructure.ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
+            services.AddTransient<Infrastructure.ApplicationDbContext>();       
+            services.AddTransient<IFundRepository, FundRepository>();
+            services.AddTransient<IManagementRepository, ManagementRepository>();
 
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<Data.ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, Data.ApplicationDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

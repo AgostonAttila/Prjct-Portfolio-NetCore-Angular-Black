@@ -21,6 +21,7 @@ import { AuthorizeInterceptor } from '../api-authorization/authorize.interceptor
 import { FundService } from './services/fund.service';
 import { FileService } from './services/file.service';
 
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,

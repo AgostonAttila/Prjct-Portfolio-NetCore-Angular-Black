@@ -1,7 +1,7 @@
 ﻿
 namespace Infrastructure
 {
-    class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         readonly ApplicationDbContext _context;
 
