@@ -12,7 +12,7 @@ using System.Net.Http;
 
 namespace Helper
 {
-    class TeletraderHelper
+    public class TeletraderHelper
     {
         static public int _actualYear = DateTime.Now.Year;
 
@@ -77,29 +77,29 @@ namespace Helper
         //        MessageBox.Show("Input parameters arempty\n");
         //}
 
-        public static List<Fund> GetTeletraderFundList(string filePath, List<Fund> fundList = null)
+        public static IEnumerable<Fund> GetTeletraderFundList(string filePath, IEnumerable<Fund> fundList = null)
         {
-
+            string[] urlArray = null;
             if (File.Exists(filePath))
+                urlArray = (!String.IsNullOrWhiteSpace(filePath)) ? urlArray = File.ReadAllLines(filePath) : urlArray = fundList.Select(p => p.Url).ToArray();
+            else if (fundList != null)
+                urlArray = fundList.Select(p => p.Url).ToArray();
+
+            if (urlArray != null)
             {
-                string[] fundArray = (!String.IsNullOrWhiteSpace(filePath)) ? fundArray = File.ReadAllLines(filePath) : fundArray = fundList.Select(p => p.Url).ToArray();
+                //Adatok leszedése    
+                fundList = GetDatasFromTeletrader(urlArray);
 
-                if (fundArray != null)
-                {
-                    //Adatok leszedése    
-                    fundList = GetDatasFromTeletrader(fundArray);
+                //Task<List<Fund>> parallelTask = Task.Factory.StartNew(() => { List<Fund> fundList = GetDatasFromTeletrader(progressBar, fundArray); return fundList; });
+                //parallelTask.Wait();
 
-                    //Task<List<Fund>> parallelTask = Task.Factory.StartNew(() => { List<Fund> fundList = GetDatasFromTeletrader(progressBar, fundArray); return fundList; });
-                    //parallelTask.Wait();
+                fundList = fundList.Where(p => p != null).ToList();
 
-                    fundList = fundList.Where(p => p != null).ToList();
-
-                    return fundList;
-                }
+                return fundList;
             }
 
             return null;
-        }      
+        }
 
 
         public static List<Fund> GetDatasFromTeletrader(string[] fundArray)
@@ -249,40 +249,38 @@ namespace Helper
             List<MonthlyPerformance> resultList = new List<MonthlyPerformance>();
             try
             {
+                var htmlDoc = new HtmlDocument();
+                string tableClassName = "component fund-monthly-performances-list";
+                html = html.Substring(html.IndexOf(tableClassName));
+                html = html.Replace(html.Substring(html.IndexOf("</table>")), "");
+                htmlDoc.LoadHtml(html);
 
-            
-            var htmlDoc = new HtmlDocument();
-            string tableClassName = "component fund-monthly-performances-list";
-            html = html.Substring(html.IndexOf(tableClassName));
-            html = html.Replace(html.Substring(html.IndexOf("</table>")), "");
-            htmlDoc.LoadHtml(html);
+                var htmlNodes = htmlDoc.DocumentNode.SelectNodes("//table//td");
 
-            var htmlNodes = htmlDoc.DocumentNode.SelectNodes("//table//td");
-
-            int counter = 0;
-            if (htmlNodes != null)
-            {
-                MonthlyPerformance actMonthlyPerformance = null;
-                for (int i = 0; i < htmlNodes.Count; i++)
+                int counter = 0;
+                if (htmlNodes != null)
                 {
-                    if (counter == 0)
-                        actMonthlyPerformance = new MonthlyPerformance { Year = htmlNodes[i].InnerHtml, PerformanceListByMonth = new List<string>() };
-                    else if (counter != 12)
-                        actMonthlyPerformance.PerformanceListByMonth.Add(htmlNodes[i].InnerHtml);
-
-                    counter++;
-                    if (counter == 12)
+                    MonthlyPerformance actMonthlyPerformance = null;
+                    for (int i = 0; i < htmlNodes.Count; i++)
                     {
-                        if (htmlNodes.Count() < i + 1)
-                            actMonthlyPerformance.Performance = htmlNodes[i + 1].InnerHtml;
-                        resultList.Add(actMonthlyPerformance);
-                        counter = 0;
-                    }
-                }
+                        if (counter == 0)
+                            actMonthlyPerformance = new MonthlyPerformance { Year = htmlNodes[i].InnerHtml, PerformanceListByMonth = new List<double?>() };
+                        else if (counter != 12)
+                            actMonthlyPerformance.PerformanceListByMonth.Add(ConvertToDouble(htmlNodes[i].InnerHtml));
 
-                return resultList;
-            }
-            return null;
+                        counter++;
+                        if (counter == 12)
+                        {
+                            if (htmlNodes.Count() < i + 1)
+                                actMonthlyPerformance.Performance = ConvertToDouble(htmlNodes[i + 1].InnerHtml);
+                            resultList.Add(actMonthlyPerformance);
+                            counter = 0;
+                        }
+                    }
+
+                    return resultList;
+                }
+                return null;
             }
             catch (Exception)
             {
@@ -291,6 +289,17 @@ namespace Helper
 
         }
 
+        static public double? ConvertToDouble(string value)
+        {
+            try
+            {
+                return Convert.ToDouble(value);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         static public string GetCurrencyRegex(string sourceText, string searchedText, int cutLong)
         {
@@ -720,7 +729,7 @@ namespace Helper
 
             }
         }
-        #endregion  
+        #endregion
 
         #region Atlag      
         static public double GetAverage(string Performance2006, string Performance2007, string Performance2008, string Performance2009, string Performance2010, string Performance2011, string Performance2012, string Performance2013, string Performance2014)

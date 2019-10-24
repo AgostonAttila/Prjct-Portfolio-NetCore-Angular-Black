@@ -27,12 +27,7 @@ namespace Helper
             officeHelper.SaveWorkBook(fileName, path);
         }
         public static void FillContent(List<Fund> fundList)
-        {
-
-           
-
-
-
+        {         
             #region Header
             List<string> headerTitleList = new List<string> { "Alap neve", "ISIN", "Valuta", "Menedzsment", "Fókusz", "1 éves", "3 éves", "5 éves", "Kezdettől" ,"",
                 (_actualYear - 9).ToString(),(_actualYear - 8).ToString(),(_actualYear - 7).ToString(),(_actualYear - 6).ToString(),(_actualYear - 5).ToString(),(_actualYear - 4).ToString(),(_actualYear - 3).ToString(),(_actualYear - 2).ToString(),(_actualYear - 1).ToString(),

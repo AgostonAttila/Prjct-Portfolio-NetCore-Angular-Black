@@ -36,7 +36,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let fund of fundList; let i = index">
-                <td>{{i+1}} </td>
+                <td (click)="rowSelected(fund)">{{i+1}} </td>          
                 <td> {{fund.isinNumber}} </td>
                 <td> {{fund.name}} </td>
                 <td> {{fund.currency}} </td>

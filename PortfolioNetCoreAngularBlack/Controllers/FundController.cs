@@ -20,19 +20,19 @@ namespace PortfolioNetCoreAngularBlack.Controllers
     [Route("api/[controller]")]
     public class FundController : Controller
     {
-      
+
         //private readonly IMapper mapper;    
         private readonly IUnitOfWork _unitOfWork;
         private IHostingEnvironment _hostingEnvironment;
 
-        private string _contentDirectoryPath = "";      
+        private string _contentDirectoryPath = "";
 
         public FundController(IUnitOfWork unitOfWork, IHostingEnvironment environment)
         {
-            _unitOfWork = unitOfWork;        
+            _unitOfWork = unitOfWork;
             _hostingEnvironment = environment;
 
-            _contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "App_Data");           
+            _contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "App_Data");
         }
 
 
@@ -48,8 +48,11 @@ namespace PortfolioNetCoreAngularBlack.Controllers
 
             var allFunds = _unitOfWork.Funds.GetAll();
             //return Ok(Mapper.Map<IEnumerable<Fund>>(allFunds));
+            foreach (var fund in allFunds)
+                fund.FillObjectProperties();
+
             return allFunds;
-           
+
         }
 
         [Route("/api/[controller]/GetFund/{isinNumber}")]
@@ -130,58 +133,32 @@ namespace PortfolioNetCoreAngularBlack.Controllers
             //if (fundList == null)
             //    return NotFound();
             string date = DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day.ToString();
-            string fileName = "Alapok_" + date + ".xlsx";             
-         
+            string fileName = "Alapok_" + date + ".xlsx";
+
 
             ExcelHelper.CreateNewWorkBook("Alapok_" + date);
             ExcelHelper.FillContent(GetFundList().ToList());
             ExcelHelper.SaveWorkBook(fileName, _contentDirectoryPath);
 
-            return Path.Combine(_contentDirectoryPath, fileName); 
+            return Path.Combine(_contentDirectoryPath, fileName);
         }
 
-        //[HttpGet("[action]")]
-        //public IEnumerable<Fund> SavePortfolioFund(string filePath, List<Fund> fundList = null)
-        //{
-        //    fundList = Helper.GetTeletraderFundList(filePath, fundList);
+        [HttpGet("[action]")]
+        public IEnumerable<Fund> SeedFundList(string filePath, IEnumerable<Fund> fundList = null)
+        {
+            fundList = Helper.TeletraderHelper.GetTeletraderFundList("D:/TestData.txt", fundList);
+            _unitOfWork.Funds.AddRange(fundList);
+            _unitOfWork.SaveChanges();
+            return fundList;
+        }
 
-        //    using (var db = new PortfolioContext())
-        //    {
-        //        for (int i = 0; i < fundList.Count; i++)
-        //        {
-        //            //fundList[i].VolatilityArrayString = String.Join(";", fundList[i].VolatilityArray);
-        //            //fundList[i].SharpRateArrayString = String.Join(";", fundList[i].SharpRateArrayString);
-        //            //fundList[i].BestMonthArrayString = String.Join(";", fundList[i].BestMonthArrayString);
-        //            //fundList[i].WorstMonthArrayString = String.Join(";", fundList[i].WorstMonthArrayString);
-        //            //fundList[i].MaxLossArrayString = String.Join(";", fundList[i].MaxLossArrayString);
-        //            //fundList[i].OverFulFilmentArrayString = String.Join(";", fundList[i].OverFulFilmentArrayString);
-
-        //            db.Funds.Add(fundList[i]);
-        //        }
-        //        var count = db.SaveChanges();
-        //    }
-
-        //    return fundList;
-        //}
-
-        //[HttpGet("[action]")]
-        //public IEnumerable<Fund> ReFreshFundList()
-        //{
-
-        //    List<Fund> fundList = GetFundList().ToList();
-        //    using (var db = new PortfolioContext())
-        //    {
-
-        //        List<FundDetail> dbFundDetailList = db.FundDetails.ToList();
-        //        for (int i = 0; i < dbFundDetailList.Count; i++)
-        //        {
-        //            if (fundList.Where(p => p.Url == dbFundDetailList[i].Url).FirstOrDefault() == null)
-        //                fundList.Add(new Fund { Url = dbFundDetailList[i].Url });
-        //        }
-
-        //        IEnumerable<Fund> fundList2 = SavePortfolioFund("", fundList);
-        //        return fundList2;
-        //    }
-        //}
+        [HttpGet("[action]")]
+        public IEnumerable<Fund> UpdateFundList()
+        {
+            IEnumerable<Fund> fundList = Helper.TeletraderHelper.GetTeletraderFundList(null, _unitOfWork.Funds.GetAll());
+            _unitOfWork.Funds.AddRange(fundList);
+            _unitOfWork.SaveChanges();
+            return fundList;
+        }
     }
 }

@@ -8,7 +8,7 @@ import Chart from 'chart.js';
 })
 export class LineChartComponent implements OnInit {
 
-    @Input() id: any; 
+    @Input() id: string; 
     @Input() dataarray: any[];
     @Input() labelarray: any[];
     @Input() label: string;
@@ -17,7 +17,7 @@ export class LineChartComponent implements OnInit {
     public ctx;
 
     //constructor() { }
-
+    
 
     gradientChartOptionsConfigurationWithTooltipRed: any = {
         maintainAspectRatio: false,

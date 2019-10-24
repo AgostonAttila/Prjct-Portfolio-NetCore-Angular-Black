@@ -20,10 +20,15 @@ export class DashboardComponent implements OnInit {
     public clicked1: boolean = false;
     public clicked2: boolean = false;
 
+    selectedFund: Fund;
 
+    volatilitySum = 100;
+    performanceSum = 100;
+    sharpeSum = 100;
+    fundlabel = 'Fund title';
 
     //services
-    fundList: any;
+    fundList: Fund[];
     error: any;
     teststring: any;
     public message: string;
@@ -42,9 +47,9 @@ export class DashboardComponent implements OnInit {
     mainChartLabelData = "My First dataset";
 
 
-    labelChartPerf = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'];
+    labelChartPerf = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     labelChartPerfData = "Data";
-    dataPerfChart = [80, 100, 70, 80, 120, 80];
+    dataPerfChart = [parseInt('100' || this.selectedFund.performanceActualMinus6), parseInt('100' || this.selectedFund.performanceActualMinus5), parseInt('100' || this.selectedFund.performanceActualMinus4), parseInt('100' || this.selectedFund.performanceActualMinus3), parseInt('100' || this.selectedFund.performanceActualMinus2), parseInt('100' || this.selectedFund.performanceActualMinus1)];
     labelChartVolatility = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'];
     labelChartVolatilityData = "My First dataset";
     dataVolatilityChart = [90, 27, 60, 12, 80];
@@ -57,14 +62,25 @@ export class DashboardComponent implements OnInit {
         service.getFundList().subscribe(
             res => {
                 this.fundList = res,
-                    this.dataPerfChart = [parseInt(this.fundList[0].PerformanceActualMinus5), parseInt(this.fundList[0].PerformanceActualMinus5), parseInt(this.fundList[0].PerformanceActualMinus5), parseInt(this.fundList[0].PerformanceActualMinus5), parseInt(this.fundList[0].PerformanceActualMinus5), parseInt(this.fundList[0].PerformanceActualMinus5)];
+                    this.dataPerfChart = [parseInt(this.fundList[0].performanceActualMinus5), parseInt(this.fundList[0].performanceActualMinus5), parseInt(this.fundList[0].performanceActualMinus5), parseInt(this.fundList[0].performanceActualMinus5), parseInt(this.fundList[0].performanceActualMinus5), parseInt(this.fundList[0].performanceActualMinus5)];
             }, // success path
             error => { this.error = error, console.log('rossz'), console.log(this.error) } // error path
         );
     }
 
     getUpdatedFundList() {
-        this.service.getUpdatedFundList().subscribe(
+        this.service.updateFundList().subscribe(
+            res => {
+                this.fundList = res,
+                    console.log('jo'),
+                    console.log(this.fundList)
+            }, // success path
+            error => { this.error = error, console.log('rossz'), console.log(this.error) } // error path
+        );
+    }
+
+    seedFundList() {
+        this.service.seedFundList().subscribe(
             res => {
                 this.fundList = res,
                     console.log('jo'),
@@ -333,7 +349,7 @@ export class DashboardComponent implements OnInit {
                 }]
             }
         };
-        
+
         var gradientBarChartConfiguration: any = {
             maintainAspectRatio: false,
             legend: {
@@ -384,8 +400,8 @@ export class DashboardComponent implements OnInit {
 
         this.barBlue(gradientBarChartConfiguration);
         this.lineGreen(gradientChartOptionsConfigurationWithTooltipGreen);
-        //this.lineRed(gradientChartOptionsConfigurationWithTooltipRed);
-        this.bigLineRed(gradientChartOptionsConfigurationWithTooltipRed);    
+        this.lineRed(gradientChartOptionsConfigurationWithTooltipRed);
+        this.bigLineRed(gradientChartOptionsConfigurationWithTooltipRed);
     }
 
     public lineRed(gradientChartOptionsConfigurationWithTooltipRed) {
@@ -547,4 +563,86 @@ export class DashboardComponent implements OnInit {
         this.myChartData.data.datasets[0].data = this.data;
         this.myChartData.update();
     }
+
+    public changeSelectedFund(fund: Fund) {
+        var cgh: any = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+
+            tooltips: {
+                backgroundColor: '#f5f5f5',
+                titleFontColor: '#333',
+                bodyFontColor: '#666',
+                bodySpacing: 4,
+                xPadding: 12,
+                mode: "nearest",
+                intersect: 0,
+                position: "nearest"
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    barPercentage: 1.6,
+                    gridLines: {
+                        drawBorder: false,
+                        color: 'rgba(29,140,248,0.0)',
+                        zeroLineColor: "transparent",
+                    },
+                    ticks: {
+                        suggestedMin: 60,
+                        suggestedMax: 125,
+                        padding: 20,
+                        fontColor: "#9a9a9a"
+                    }
+                }],
+
+                xAxes: [{
+                    barPercentage: 1.6,
+                    gridLines: {
+                        drawBorder: false,
+                        color: 'rgba(233,32,16,0.1)',
+                        zeroLineColor: "transparent",
+                    },
+                    ticks: {
+                        padding: 20,
+                        fontColor: "#9a9a9a"
+                    }
+                }]
+            }
+        };
+
+
+        //this.selectedFund = fund;
+        var monthlyPerformanceArray = [];
+        var monthlyTitleArray = [];
+        for (var i = 0; i < fund.monthlyPerformanceList.length; i++) {
+            for (var j = 0; j < fund.monthlyPerformanceList[i].performanceListByMonth.length; j++) {
+                monthlyPerformanceArray.push(+fund.monthlyPerformanceList[i].performanceListByMonth[j]);
+                if (j == 0)
+                    monthlyTitleArray.push(fund.monthlyPerformanceList[i].year);
+                else
+                    monthlyTitleArray.push('');
+            }
+        }
+
+        this.mainChartData =
+            [
+                monthlyTitleArray,
+                monthlyTitleArray,
+                monthlyTitleArray
+            ];
+
+        this.mainChartLabels = monthlyTitleArray;
+
+        this.bigLineRed(cgh);
+
+
+        this.dataPerfChart = [parseInt(fund.performanceActualMinus6) || 100, parseInt(fund.performanceActualMinus5) || 100, parseInt(fund.performanceActualMinus4) || 100, parseInt(fund.performanceActualMinus3) || 100, parseInt(fund.performanceActualMinus2) || 100, parseInt(fund.performanceActualMinus1) || 100];
+        this.lineRed(cgh);
+        this.fundlabel = fund.name + ' ( ' + fund.isinNumber + ' )';
+        this.performanceSum = parseInt(fund.performanceActualMinus6) + parseInt(fund.performanceActualMinus5) + parseInt(fund.performanceActualMinus4) + parseInt(fund.performanceActualMinus3) + parseInt(fund.performanceActualMinus2) + parseInt(fund.performanceActualMinus1);
+    }   
+
 }

@@ -21,11 +21,13 @@ namespace Infrastructure
 
         public virtual void Add(TEntity entity)
         {
-            _entities.Add(entity);
+            if (entity != null)
+                _entities.Add(entity);
         }
 
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
+            if(entities!= null)
             _entities.AddRange(entities);
         }
 

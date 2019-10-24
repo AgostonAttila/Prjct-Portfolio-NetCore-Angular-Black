@@ -1,50 +1,48 @@
 export interface Fund {
-  Currency: string;
-  FundName: string;
-  ISINNumber: string;
-  Management: string;
-  Focus: string;
-  Type: string;
-  PerformanceYTD: string;
-  Performance1Year: string;
-  Performance3Year: string;
-  Performance5Year: string;
-  PerformanceFromBeggining: string;
-  PerformanceActualMinus9: string;
-  PerformanceActualMinus8: string;
-  PerformanceActualMinus7: string;
-  PerformanceActualMinus6: string;
-  PerformanceActualMinus5: string;
-  PerformanceActualMinus4: string;
-  PerformanceActualMinus3: string;
-  PerformanceActualMinus2: string;
-  PerformanceActualMinus1: string;
-  PerformanceAverage: string;
+  currency: string;
+  name: string;
+  isinNumber: string;
+  management: string;
+  focus: string;
+  type: string;
+  performanceYTD: string;
+  performance1Year: string;
+  performance3Year: string;
+  performance5Year: string;
+  performanceFromBeggining: string;
+  performanceActualMinus9: string;
+  performanceActualMinus8: string;
+  performanceActualMinus7: string;
+  performanceActualMinus6: string;
+  performanceActualMinus5: string;
+  performanceActualMinus4: string;
+  performanceActualMinus3: string;
+  performanceActualMinus2: string;
+  performanceActualMinus1: string;
+  performanceAverage: string;
 
-  Url: string;
+  url: string;
 
-  VolatilityArray: string[];
-  SharpRateArray: string[];
-  BestMonthArray: string[];
-  WorstMonthArray: string[];
-  MaxLossArray: string[];
-  OverFulFilmentArray: string[];
+  volatilityArray: string[];
+  sharpRateArray: string[];
+  bestMonthArray: string[];
+  worstMonthArray: string[];
+  maxLossArray: string[];
+  overFulFilmentArray: string[];
 
+  volatilityString: string;
+  sharpRateString: string;
+  bestMonthString: string;
+  worstMonthString: string;
+  maxLossString: string;
+  overFulFilmentString: string;
 
-
-  VolatilityString: string;
-  SharpRateString: string;
-  BestMonthString: string;
-  WorstMonthString: string;
-  MaxLossString: string;
-  OverFulFilmentStringy: string;
-
-  MonthlyPerformanceList: MonthlyPerformance[];
+  monthlyPerformanceList: MonthlyPerformance[];
 
 }
 
 export interface MonthlyPerformance {
-  Year: string;
-  PerformanceListByMonth: string[];
-  Performance : string;
+  year: string;
+  performanceListByMonth: number[];
+  performance : number;
 }

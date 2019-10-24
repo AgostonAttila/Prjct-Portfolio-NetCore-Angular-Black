@@ -11,18 +11,7 @@ namespace Core
     {
         public Fund()
         {
-            if (this != null)
-            {
-
-                this.MonthlyPerformanceList = (this.MonthlyPerformanceAsString != null) ? JsonConvert.DeserializeObject<List<MonthlyPerformance>>(this.MonthlyPerformanceAsString) : new List<MonthlyPerformance>();
-
-                this.VolatilityArray = (!String.IsNullOrWhiteSpace(this.VolatilityArrayAsString)) ? this.VolatilityArrayAsString.Split(';').ToList() : new List<string>();
-                this.SharpRateArray = (!String.IsNullOrWhiteSpace(this.SharpRateArrayAsString)) ? this.SharpRateArrayAsString.Split(';').ToList() : new List<string>();
-                this.BestMonthArray = (!String.IsNullOrWhiteSpace(this.BestMonthArrayAsString)) ? this.BestMonthArrayAsString.Split(';').ToList() : new List<string>();
-                this.WorstMonthArray = (!String.IsNullOrWhiteSpace(this.WorstMonthArrayAsString)) ? this.WorstMonthArrayAsString.Split(';').ToList() : new List<string>();
-                this.MaxLossArray = (!String.IsNullOrWhiteSpace(this.MaxLossArrayAsString)) ? this.MaxLossArrayAsString.Split(';').ToList() : new List<string>();
-                this.OverFulFilmentArray = (!String.IsNullOrWhiteSpace(this.OverFulFilmentArrayAsString)) ? this.OverFulFilmentArrayAsString.Split(';').ToList() : new List<string>();
-            }
+            FillObjectProperties();
         }
 
 
@@ -88,6 +77,19 @@ namespace Core
             this.MaxLossArrayAsString = (this.MaxLossArray != null) ? string.Join(";", this.MaxLossArray) : "";
             this.OverFulFilmentArrayAsString = (this.OverFulFilmentArray != null) ? string.Join(";", this.VolatilityArray) : "";
         }
+
+
+        public void FillObjectProperties()
+        {
+            this.MonthlyPerformanceList = (this.MonthlyPerformanceAsString != null) ? JsonConvert.DeserializeObject<List<MonthlyPerformance>>(this.MonthlyPerformanceAsString) : new List<MonthlyPerformance>();
+
+            this.VolatilityArray = (!String.IsNullOrWhiteSpace(this.VolatilityArrayAsString)) ? this.VolatilityArrayAsString.Split(';').ToList() : new List<string>();
+            this.SharpRateArray = (!String.IsNullOrWhiteSpace(this.SharpRateArrayAsString)) ? this.SharpRateArrayAsString.Split(';').ToList() : new List<string>();
+            this.BestMonthArray = (!String.IsNullOrWhiteSpace(this.BestMonthArrayAsString)) ? this.BestMonthArrayAsString.Split(';').ToList() : new List<string>();
+            this.WorstMonthArray = (!String.IsNullOrWhiteSpace(this.WorstMonthArrayAsString)) ? this.WorstMonthArrayAsString.Split(';').ToList() : new List<string>();
+            this.MaxLossArray = (!String.IsNullOrWhiteSpace(this.MaxLossArrayAsString)) ? this.MaxLossArrayAsString.Split(';').ToList() : new List<string>();
+            this.OverFulFilmentArray = (!String.IsNullOrWhiteSpace(this.OverFulFilmentArrayAsString)) ? this.OverFulFilmentArrayAsString.Split(';').ToList() : new List<string>();
+        }
     }
 
 
@@ -95,7 +97,7 @@ namespace Core
     public class MonthlyPerformance
     {
         public string Year { get; set; }
-        public List<string> PerformanceListByMonth { get; set; }
-        public string Performance { get; set; }
+        public List<double?> PerformanceListByMonth { get; set; }
+        public double? Performance { get; set; }
     }
 }
