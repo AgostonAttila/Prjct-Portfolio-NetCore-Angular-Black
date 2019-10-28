@@ -68,20 +68,7 @@ namespace PortfolioNetCoreAngularBlack.Controllers
             var fund = _unitOfWork.Funds.Get(isinNumber);
             //return Ok(Mapper.Map<FundViewModel>(fund));           
             return fund;
-        }
-
-        [HttpGet("[action]")]
-        public IEnumerable<Fund> GetUpdatedFundList()
-        {
-            //if (!ModelState.IsValid)
-            //    return BadRequest(ModelState);         
-
-            //if (fundList == null)
-            //    return NotFound();
-
-            // return _repository.GetUpdatedFundList();
-            return null;
-        }
+        }       
 
         [HttpGet("[action]")]
         public Fund Test()
@@ -122,8 +109,6 @@ namespace PortfolioNetCoreAngularBlack.Controllers
         }
 
 
-
-
         [HttpGet("[action]")]
         public string GenerateExcelFundList()
         {
@@ -160,5 +145,21 @@ namespace PortfolioNetCoreAngularBlack.Controllers
             _unitOfWork.SaveChanges();
             return fundList;
         }
+
+        [HttpGet("[action]")]
+        public IEnumerable<Fund> RemoveAllFund()
+        {
+            //if (!ModelState.IsValid)
+            //    return BadRequest(ModelState);         
+
+            //if (fundList == null)
+            //    return NotFound();
+
+            _unitOfWork.Funds.RemoveRange(_unitOfWork.Funds.GetAll());
+            _unitOfWork.SaveChanges();
+            return null;
+        }
+
+
     }
 }

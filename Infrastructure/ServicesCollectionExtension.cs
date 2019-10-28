@@ -10,7 +10,7 @@ namespace Infrastructure
             //    //services.AddTransient<IEmailSender, AuthMessageSender>();
             //    //services.AddTransient<IApplicationDataService, ApplicationDataService>();
             services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
-            services.AddTransient<ApplicationDbContext>();
+            services.AddTransient<PortfolioDbContext>();
             //   // services.AddTransient<ISeedData, SeedData>();
             services.AddTransient<IFundRepository, FundRepository>();
             services.AddTransient<IManagementRepository, ManagementRepository>();

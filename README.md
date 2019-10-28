@@ -1,7 +1,7 @@
 # PortfolioNetCoreAngularBlack
 
 
-## 20190317  program folytatása 20191018
+## 20190317  program folytatï¿½sa 20191018
 
 1. Core
 2. Infrastructure
@@ -12,10 +12,13 @@
 - Repository pattern (interface)
 - Unit of Work (interface)
 - Automapper
-- Application DB Context
+- Application DB Context MultiContext
 - Identity
 * *Swagger (basic/standard)
 * *ILogger LoggerFactory (basic/standard)
+
+- Multi Language
+
 
 ## Frontend (Angular 8)
 Black Dashboard template

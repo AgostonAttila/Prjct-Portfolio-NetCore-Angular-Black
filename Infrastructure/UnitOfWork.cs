@@ -3,13 +3,13 @@ namespace Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        readonly ApplicationDbContext _context;
+        readonly PortfolioDbContext _context;
 
         IFundRepository _funds;
         IManagementRepository _managements;       
 
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(PortfolioDbContext context)
         {
             _context = context;
         }
