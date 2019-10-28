@@ -11,8 +11,8 @@ namespace Infrastructure
         public DbSet<Fund> Funds { get; set; }
         public DbSet<Management> Managements { get; set; }
 
-        IHostEnvironment _hostingEnvironment;
-        private string _contentDirectoryPath = "";
+        //IHostEnvironment _hostingEnvironment;
+        //private string _contentDirectoryPath = "";
 
         //public PortfolioDbContext(IHostEnvironment environment)
         //{
@@ -20,17 +20,17 @@ namespace Infrastructure
         //    _contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "App_Data", "portfolio.db");
         //}
 
-        public PortfolioDbContext(DbContextOptions<PortfolioDbContext> options, IHostEnvironment environment) : base(options)
+        public PortfolioDbContext(DbContextOptions<PortfolioDbContext> options) : base(options)
         {
-            _hostingEnvironment = environment;
-            _contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "fund.db");
+            //_hostingEnvironment = environment;
+            //_contentDirectoryPath = Path.Combine(_hostingEnvironment.ContentRootPath, "fund.db");
         }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=" + _contentDirectoryPath);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite("Data Source=" + _contentDirectoryPath);
+        //}
 
     }
 }
