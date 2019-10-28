@@ -264,15 +264,22 @@ namespace Helper
                     for (int i = 0; i < htmlNodes.Count; i++)
                     {
                         if (counter == 0)
-                            actMonthlyPerformance = new MonthlyPerformance { Year = htmlNodes[i].InnerHtml, PerformanceListByMonth = new List<double?>() };
-                        else if (counter != 12)
-                            actMonthlyPerformance.PerformanceListByMonth.Add(ConvertToDouble(htmlNodes[i].InnerHtml));
-
-                        counter++;
-                        if (counter == 12)
                         {
-                            if (htmlNodes.Count() < i + 1)
-                                actMonthlyPerformance.Performance = ConvertToDouble(htmlNodes[i + 1].InnerHtml);
+                            actMonthlyPerformance = new MonthlyPerformance { Year = htmlNodes[i].InnerHtml, PerformanceListByMonth = new List<double?>() };
+                            counter++;
+                        }
+                        else if (counter < 13)
+                        {
+                            actMonthlyPerformance.PerformanceListByMonth.Add(ConvertToDouble(htmlNodes[i].InnerHtml));
+                            counter++;
+                        }
+                        else
+                        {
+                            // "<span class=\"down\">-2,68%</span>"  or up
+
+                            Regex regData = new Regex(@"[+|-]+\d+.+\d+");
+                            Match matData = regData.Match(htmlNodes[i].InnerHtml);
+                            actMonthlyPerformance.Performance = ConvertToDouble(matData.Value);
                             resultList.Add(actMonthlyPerformance);
                             counter = 0;
                         }
