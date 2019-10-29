@@ -296,11 +296,11 @@ namespace Helper
 
         }
 
-        static public double? ConvertToDouble(string value)
+        static public double? ConvertToDouble(string text)
         {
             try
             {
-                return Convert.ToDouble(value);
+                return Convert.ToDouble(text.Replace(",","."));
             }
             catch (Exception)
             {
@@ -585,6 +585,7 @@ namespace Helper
                     swapText = Regex.Replace(swapText, @"\t|\r", "");
                     swapText = Regex.Replace(swapText, @"\n", " ");
                     swapText = swapText.Trim();
+                    swapText = swapText.Replace("%", "");
                     string[] digits = Regex.Split(swapText, @"\s+");
 
                     return digits.ToList();
@@ -624,6 +625,7 @@ namespace Helper
                     swapText = Regex.Replace(swapText, @"\t|\r", "");
                     swapText = Regex.Replace(swapText, @"\n", " ");
                     swapText = swapText.Trim();
+                    swapText = swapText.Replace("%", "");
                     string[] digits = Regex.Split(swapText, @"\s+");
 
                     return digits.ToList();

@@ -13,12 +13,19 @@ import { Fund } from '../../models/fund';
 export class DashboardComponent implements OnInit {
     public canvas: any;
     public ctx;
-    public datasets: any;
-    public data: any;
-    public myChartData;
+
     public clicked: boolean = true;
     public clicked1: boolean = false;
     public clicked2: boolean = false;
+
+
+    public datasets: any;
+    public data: any;
+    public myChartDataBigRed;
+
+    public myChartDataGreen;
+    public myChartDataBlue;
+    public myChartDataRed;
 
     selectedFund: Fund;
 
@@ -37,25 +44,318 @@ export class DashboardComponent implements OnInit {
     actualYear = (new Date()).getFullYear()
 
     //charts
-    mainChartLabels = ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019'];
+
+    gradientChartOptionsConfigurationWithTooltipBlue: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 60,
+                    suggestedMax: 125,
+                    padding: 20,
+                    fontColor: "#2380f7"
+                }
+            }],
+
+            xAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#2380f7"
+                }
+            }]
+        }
+    };
+
+    gradientChartOptionsConfigurationWithTooltipPurple: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 60,
+                    suggestedMax: 125,
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+            }],
+
+            xAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(225,78,202,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+            }]
+        }
+    };
+
+    gradientChartOptionsConfigurationWithTooltipRed: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 60,
+                    suggestedMax: 125,
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+            }],
+
+            xAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(233,32,16,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+            }]
+        }
+    };
+
+    gradientChartOptionsConfigurationWithTooltipOrange: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 110,
+                    padding: 20,
+                    fontColor: "#ff8a76"
+                }
+            }],
+
+            xAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(220,53,69,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#ff8a76"
+                }
+            }]
+        }
+    };
+
+    gradientChartOptionsConfigurationWithTooltipGreen: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 125,
+                    padding: 20,
+                    fontColor: "#9e9e9e"
+                }
+            }],
+
+            xAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(0,242,195,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#9e9e9e"
+                }
+            }]
+        }
+    };
+
+    gradientBarChartConfiguration: any = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+
+        tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+        },
+        responsive: true,
+        scales: {
+            yAxes: [{
+
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 60,
+                    suggestedMax: 120,
+                    padding: 20,
+                    fontColor: "#9e9e9e"
+                }
+            }],
+
+            xAxes: [{
+
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#9e9e9e"
+                }
+            }]
+        }
+    };
+
+    mainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    //mainChartLabels = ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019'];
     mainChartData =
         [
             [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
             [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
             [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
         ];
-    mainChartLabelData = "My First dataset";
+   
 
 
     labelChartPerf = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    labelChartPerfData = "Data";
+    labelChartVolatility = this.labelChartPerf;
+    labelChartSharpeLabel = this.labelChartPerf;   
+
+    labelChartPerfData = "Value";
+    labelChartVolatilityData = this.labelChartPerfData;
+    labelChartSharpeLabelData = this.labelChartPerfData;
+    mainChartLabelData = this.labelChartPerfData;
+
     dataPerfChart = [parseInt('100' || this.selectedFund.performanceActualMinus6), parseInt('100' || this.selectedFund.performanceActualMinus5), parseInt('100' || this.selectedFund.performanceActualMinus4), parseInt('100' || this.selectedFund.performanceActualMinus3), parseInt('100' || this.selectedFund.performanceActualMinus2), parseInt('100' || this.selectedFund.performanceActualMinus1)];
-    labelChartVolatility = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'];
-    labelChartVolatilityData = "My First dataset";
-    dataVolatilityChart = [90, 27, 60, 12, 80];
-    labelChartSharpeLabel = ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'];
-    labelChartSharpeLabelData = "Countries";
-    dataSharpeChart = [53, 20, 10, 80, 100, 45];
+    dataVolatilityChart = this.dataPerfChart;
+    dataSharpeChart = this.dataPerfChart;
 
 
     constructor(private service: FundService, private fileService: FileService, private http: HttpClient) {
@@ -110,298 +410,11 @@ export class DashboardComponent implements OnInit {
 
 
     ngOnInit() {
-        var gradientChartOptionsConfigurationWithTooltipBlue: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
 
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 60,
-                        suggestedMax: 125,
-                        padding: 20,
-                        fontColor: "#2380f7"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#2380f7"
-                    }
-                }]
-            }
-        };
-
-        var gradientChartOptionsConfigurationWithTooltipPurple: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 60,
-                        suggestedMax: 125,
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(225,78,202,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }]
-            }
-        };
-
-        var gradientChartOptionsConfigurationWithTooltipRed: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 60,
-                        suggestedMax: 125,
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(233,32,16,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }]
-            }
-        };
-
-        var gradientChartOptionsConfigurationWithTooltipOrange: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 50,
-                        suggestedMax: 110,
-                        padding: 20,
-                        fontColor: "#ff8a76"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(220,53,69,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#ff8a76"
-                    }
-                }]
-            }
-        };
-
-        var gradientChartOptionsConfigurationWithTooltipGreen: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 50,
-                        suggestedMax: 125,
-                        padding: 20,
-                        fontColor: "#9e9e9e"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(0,242,195,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#9e9e9e"
-                    }
-                }]
-            }
-        };
-
-        var gradientBarChartConfiguration: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 60,
-                        suggestedMax: 120,
-                        padding: 20,
-                        fontColor: "#9e9e9e"
-                    }
-                }],
-
-                xAxes: [{
-
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#9e9e9e"
-                    }
-                }]
-            }
-        };
-
-        this.barBlue(gradientBarChartConfiguration);
-        this.lineGreen(gradientChartOptionsConfigurationWithTooltipGreen);
-        this.lineRed(gradientChartOptionsConfigurationWithTooltipRed);
-        this.bigLineRed(gradientChartOptionsConfigurationWithTooltipRed);
+        this.barBlue(this.gradientBarChartConfiguration);
+        this.lineGreen(this.gradientChartOptionsConfigurationWithTooltipGreen);
+        this.lineRed(this.gradientChartOptionsConfigurationWithTooltipRed);
+        this.bigLineRed(this.gradientChartOptionsConfigurationWithTooltipRed);
     }
 
     public lineRed(gradientChartOptionsConfigurationWithTooltipRed) {
@@ -435,7 +448,7 @@ export class DashboardComponent implements OnInit {
             }]
         };
 
-        var myChart = new Chart(this.ctx, {
+        this.myChartDataRed = new Chart(this.ctx, {
             type: 'line',
             data: data,
             options: gradientChartOptionsConfigurationWithTooltipRed
@@ -474,7 +487,7 @@ export class DashboardComponent implements OnInit {
             }]
         };
 
-        var myChart = new Chart(this.ctx, {
+        this.myChartDataGreen = new Chart(this.ctx, {
             type: 'line',
             data: data,
             options: gradientChartOptionsConfigurationWithTooltipGreen
@@ -492,7 +505,7 @@ export class DashboardComponent implements OnInit {
         gradientStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
 
 
-        var myChart = new Chart(this.ctx, {
+        this.myChartDataBlue = new Chart(this.ctx, {
             type: 'bar',
             responsive: true,
             legend: {
@@ -517,7 +530,7 @@ export class DashboardComponent implements OnInit {
     }
 
     public bigLineRed(gradientChartOptionsConfigurationWithTooltipRed) {
-        var chart_labels = this.mainChartLabels;
+        //var chart_labels = this.mainChartLabels;
         this.datasets = this.mainChartData;
         this.data = this.datasets[0];
 
@@ -535,7 +548,7 @@ export class DashboardComponent implements OnInit {
         var config = {
             type: 'line',
             data: {
-                labels: chart_labels,
+                labels: this.mainChartLabels,//var chart_labels 
                 datasets: [{
                     label: this.mainChartLabelData,
                     fill: true,
@@ -556,93 +569,87 @@ export class DashboardComponent implements OnInit {
             },
             options: gradientChartOptionsConfigurationWithTooltipRed
         };
-        this.myChartData = new Chart(this.ctx, config);
+        this.myChartDataBigRed = new Chart(this.ctx, config);
     }
 
     public updateOptions() {
-        this.myChartData.data.datasets[0].data = this.data;
-        this.myChartData.update();
+        this.myChartDataBigRed.data.datasets[0].data = this.data;
+        this.myChartDataBigRed.data.datasets[0].label = this.mainChartLabels;
+        this.myChartDataBigRed.update();
+    }
+
+    public updateRedChart() {
+        this.myChartDataRed.data.datasets[0].data = this.dataPerfChart;
+        this.myChartDataRed.update();
+    }
+
+    public updateGreenChart() {
+        this.myChartDataGreen.data.datasets[0].data = this.dataSharpeChart;
+        this.myChartDataGreen.update();
+    }
+
+    public updateBlueChart() {
+        this.myChartDataBlue.data.datasets[0].data = this.dataVolatilityChart;
+        this.myChartDataBlue.update();
     }
 
     public changeSelectedFund(fund: Fund) {
-        var cgh: any = {
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
 
-            tooltips: {
-                backgroundColor: '#f5f5f5',
-                titleFontColor: '#333',
-                bodyFontColor: '#666',
-                bodySpacing: 4,
-                xPadding: 12,
-                mode: "nearest",
-                intersect: 0,
-                position: "nearest"
-            },
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(29,140,248,0.0)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        suggestedMin: 60,
-                        suggestedMax: 125,
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }],
-
-                xAxes: [{
-                    barPercentage: 1.6,
-                    gridLines: {
-                        drawBorder: false,
-                        color: 'rgba(233,32,16,0.1)',
-                        zeroLineColor: "transparent",
-                    },
-                    ticks: {
-                        padding: 20,
-                        fontColor: "#9a9a9a"
-                    }
-                }]
-            }
-        };
-
+        this.selectedFund = fund;
 
         //this.selectedFund = fund;
         var monthlyPerformanceArray = [];
         var monthlyTitleArray = [];
-        for (var i = 0; i < fund.monthlyPerformanceList.length; i++) {
-            for (var j = 0; j < fund.monthlyPerformanceList[i].performanceListByMonth.length; j++) {
-                monthlyPerformanceArray.push(+fund.monthlyPerformanceList[i].performanceListByMonth[j]);
-                if (j == 0)
-                    monthlyTitleArray.push(fund.monthlyPerformanceList[i].year);
-                else
-                    monthlyTitleArray.push('');
-            }
-        }
+        //for (var i = 0; i < fund.monthlyPerformanceList.length; i++) {
+            for (var j = 0; j < fund.monthlyPerformanceList[2].performanceListByMonth.length; j++) {
+                if (fund.monthlyPerformanceList[2].performanceListByMonth[j] == null)
+                    fund.monthlyPerformanceList[2].performanceListByMonth[j] = 0;
 
+                monthlyPerformanceArray.push(+fund.monthlyPerformanceList[2].performanceListByMonth[j]);
+
+                //if (j == 0)
+                //    monthlyTitleArray.push(fund.monthlyPerformanceList[i].year);
+                //else
+                //    monthlyTitleArray.push(' ');
+            }
+        //}
+
+        //this.mainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+        this.data = monthlyPerformanceArray;
         this.mainChartData =
             [
-                monthlyTitleArray,
-                monthlyTitleArray,
-                monthlyTitleArray
+                monthlyPerformanceArray,
+                monthlyPerformanceArray,
+                monthlyPerformanceArray
             ];
 
-        this.mainChartLabels = monthlyTitleArray;
 
-        this.bigLineRed(cgh);
+        //this.mainChartLabels = monthlyTitleArray;
 
 
-        this.dataPerfChart = [parseInt(fund.performanceActualMinus6) || 100, parseInt(fund.performanceActualMinus5) || 100, parseInt(fund.performanceActualMinus4) || 100, parseInt(fund.performanceActualMinus3) || 100, parseInt(fund.performanceActualMinus2) || 100, parseInt(fund.performanceActualMinus1) || 100];
-        this.lineRed(cgh);
+        //BIG CHART
+        this.data = this.mainChartData[0];
         this.fundlabel = fund.name + ' ( ' + fund.isinNumber + ' )';
+        this.updateOptions();
+
+        //SUM RED
+        this.dataPerfChart = [parseInt(fund.performanceActualMinus6) || 100, parseInt(fund.performanceActualMinus5) || 100, parseInt(fund.performanceActualMinus4) || 100, parseInt(fund.performanceActualMinus3) || 100, parseInt(fund.performanceActualMinus2) || 100, parseInt(fund.performanceActualMinus1) || 100];
         this.performanceSum = parseInt(fund.performanceActualMinus6) + parseInt(fund.performanceActualMinus5) + parseInt(fund.performanceActualMinus4) + parseInt(fund.performanceActualMinus3) + parseInt(fund.performanceActualMinus2) + parseInt(fund.performanceActualMinus1);
-    }   
+        this.lineRed(this.gradientChartOptionsConfigurationWithTooltipRed);
+
+        //VOLATILITY BLUE     
+        this.dataVolatilityChart = this.dataPerfChart;
+        this.volatilitySum = this.performanceSum
+        this.updateBlueChart();
+
+        //SHARPE GREEN
+        this.dataSharpeChart = this.dataPerfChart;
+        this.sharpeSum = this.performanceSum
+        this.updateGreenChart();
+
+
+
+    }
 
 }

@@ -78,7 +78,7 @@ namespace Infrastructure
 
         public virtual IEnumerable<TEntity> GetAll()
         {
-            return _entities.ToList();
+            return _entities.AsNoTracking().ToList();
         }
     }
 }
