@@ -33,6 +33,10 @@ export class FundService {
         return this.http.get<Fund[]>(this.endpoint + '/UpdateFundList');
     }
 
+   deleteFundList(): Observable<Fund[]> {
+       return this.http.get<Fund[]>(this.endpoint + '/RemoveAllFund');
+    }
+
     getExcelFundList(): Observable<string> {
         return this.http.get<string>(this.endpoint + '/GenerateExcelFundList');
     }

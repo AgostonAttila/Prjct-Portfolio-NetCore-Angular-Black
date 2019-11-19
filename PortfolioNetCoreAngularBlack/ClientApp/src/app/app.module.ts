@@ -41,7 +41,7 @@ import { FileService } from './services/file.service';
   ],
   declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
   providers: [
-      { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+     // { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
       FundService,
       FileService 
   ],

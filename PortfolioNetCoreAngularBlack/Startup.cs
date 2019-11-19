@@ -59,17 +59,17 @@ namespace PortfolioNetCoreAngularBlack
             //   .AddMessagePackProtocol();
             services.AddCustomLocalization(HostEnvironment);
 
-            //old
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            //old
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            ////old
+            //services.AddDefaultIdentity<ApplicationUser>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            ////old
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddCustomDbContext();                         
             //old
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            //services.AddAuthentication()
+            //    .AddIdentityServerJwt();
             //old
             services.AddControllersWithViews();
             //old
@@ -168,7 +168,7 @@ namespace PortfolioNetCoreAngularBlack
             //app.UseForwardedHeaders(forwarOptions);
 
             app.UseAuthentication();
-            app.UseIdentityServer();
+         //   app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

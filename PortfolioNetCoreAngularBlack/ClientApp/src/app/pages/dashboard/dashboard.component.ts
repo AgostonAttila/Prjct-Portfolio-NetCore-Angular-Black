@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import Chart from 'chart.js';
 import { FundService } from '../../services/fund.service';
 import { FileService } from '../../services/file.service';
@@ -11,6 +11,9 @@ import { Fund } from '../../models/fund';
     templateUrl: "dashboard.component.html"
 })
 export class DashboardComponent implements OnInit {
+
+    @Output() changeDataChartEmit = new EventEmitter<{}>()
+
     public canvas: any;
     public ctx;
 
@@ -18,6 +21,9 @@ export class DashboardComponent implements OnInit {
     public clicked1: boolean = false;
     public clicked2: boolean = false;
 
+    public first = new Date().getFullYear();
+    public second = this.first - 1;
+    public third =  this.first - 2;
 
     public datasets: any;
     public data: any;
@@ -44,6 +50,11 @@ export class DashboardComponent implements OnInit {
     actualYear = (new Date()).getFullYear()
 
     //charts
+
+
+    max = 10;
+    min = -10;
+
 
     gradientChartOptionsConfigurationWithTooltipBlue: any = {
         maintainAspectRatio: false,
@@ -167,9 +178,9 @@ export class DashboardComponent implements OnInit {
                     zeroLineColor: "transparent",
                 },
                 ticks: {
-                    suggestedMin: 60,
-                    suggestedMax: 125,
-                    padding: 20,
+                    suggestedMin: this.min,
+                    suggestedMax: this.max,
+                    padding: 1,
                     fontColor: "#9a9a9a"
                 }
             }],
@@ -334,6 +345,7 @@ export class DashboardComponent implements OnInit {
     };
 
     mainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    ////this.mainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     //mainChartLabels = ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019'];
     mainChartData =
         [
@@ -341,12 +353,12 @@ export class DashboardComponent implements OnInit {
             [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
             [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
         ];
-   
+
 
 
     labelChartPerf = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     labelChartVolatility = this.labelChartPerf;
-    labelChartSharpeLabel = this.labelChartPerf;   
+    labelChartSharpe = this.labelChartPerf;
 
     labelChartPerfData = "Value";
     labelChartVolatilityData = this.labelChartPerfData;
@@ -381,6 +393,17 @@ export class DashboardComponent implements OnInit {
 
     seedFundList() {
         this.service.seedFundList().subscribe(
+            res => {
+                this.fundList = res,
+                    console.log('jo'),
+                    console.log(this.fundList)
+            }, // success path
+            error => { this.error = error, console.log('rossz'), console.log(this.error) } // error path
+        );
+    }
+
+    deleteFundList() {
+        this.service.deleteFundList().subscribe(
             res => {
                 this.fundList = res,
                     console.log('jo'),
@@ -512,7 +535,7 @@ export class DashboardComponent implements OnInit {
                 display: false
             },
             data: {
-                labels: this.labelChartSharpeLabel,
+                labels: this.labelChartSharpe,
                 datasets: [{
                     label: this.labelChartSharpeLabelData,
                     fill: true,
@@ -574,81 +597,76 @@ export class DashboardComponent implements OnInit {
 
     public updateOptions() {
         this.myChartDataBigRed.data.datasets[0].data = this.data;
-        this.myChartDataBigRed.data.datasets[0].label = this.mainChartLabels;
+        this.myChartDataBigRed.options.scales.yAxes[0].ticks.suggestedMin = Math.max.apply(Math, this.data);
+        this.myChartDataBigRed.options.scales.yAxes[0].ticks.suggestedMax = Math.min.apply(Math, this.data);
+        //this.myChartDataBigRed.data.labels = this.label;
         this.myChartDataBigRed.update();
     }
 
     public updateRedChart() {
         this.myChartDataRed.data.datasets[0].data = this.dataPerfChart;
+        this.myChartDataRed.options.scales.yAxes[0].ticks.suggestedMin = Math.max.apply(Math, this.dataPerfChart);
+        this.myChartDataRed.options.scales.yAxes[0].ticks.suggestedMax = Math.min.apply(Math, this.dataPerfChart);
         this.myChartDataRed.update();
     }
 
     public updateGreenChart() {
         this.myChartDataGreen.data.datasets[0].data = this.dataSharpeChart;
+        this.myChartDataGreen.options.scales.yAxes[0].ticks.suggestedMin = Math.max.apply(Math, this.dataSharpeChart);
+        this.myChartDataGreen.options.scales.yAxes[0].ticks.suggestedMax = Math.min.apply(Math, this.dataSharpeChart);
         this.myChartDataGreen.update();
     }
 
     public updateBlueChart() {
         this.myChartDataBlue.data.datasets[0].data = this.dataVolatilityChart;
+        this.myChartDataBlue.options.scales.yAxes[0].ticks.suggestedMin = Math.max.apply(Math, this.dataVolatilityChart);
+        this.myChartDataBlue.options.scales.yAxes[0].ticks.suggestedMax = Math.min.apply(Math, this.dataVolatilityChart);
         this.myChartDataBlue.update();
     }
+
 
     public changeSelectedFund(fund: Fund) {
 
         this.selectedFund = fund;
+        this.changeDataChartEmit.emit(this.selectedFund);
 
-        //this.selectedFund = fund;
-        var monthlyPerformanceArray = [];
-        var monthlyTitleArray = [];
-        //for (var i = 0; i < fund.monthlyPerformanceList.length; i++) {
-            for (var j = 0; j < fund.monthlyPerformanceList[2].performanceListByMonth.length; j++) {
-                if (fund.monthlyPerformanceList[2].performanceListByMonth[j] == null)
-                    fund.monthlyPerformanceList[2].performanceListByMonth[j] = 0;
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
-                monthlyPerformanceArray.push(+fund.monthlyPerformanceList[2].performanceListByMonth[j]);
+        //this.array = [];
+        //this.label = [];
 
-                //if (j == 0)
-                //    monthlyTitleArray.push(fund.monthlyPerformanceList[i].year);
-                //else
-                //    monthlyTitleArray.push(' ');
-            }
-        //}
-
-        //this.mainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
-        this.data = monthlyPerformanceArray;
-        this.mainChartData =
-            [
-                monthlyPerformanceArray,
-                monthlyPerformanceArray,
-                monthlyPerformanceArray
-            ];
-
-
-        //this.mainChartLabels = monthlyTitleArray;
-
+        //fund.monthlyPerformanceList.forEach(function (item) {
+        //    this.array.concat(item.performanceListByMonth);
+        //    this.label.concat(this.mainChartLabels);
+        //});
 
         //BIG CHART
-        this.data = this.mainChartData[0];
+
+
+        this.mainChartData =
+            [
+                fund.monthlyPerformanceList[fund.monthlyPerformanceList.length - 1].performanceListByMonth,
+                fund.monthlyPerformanceList[fund.monthlyPerformanceList.length - 2].performanceListByMonth,
+                fund.monthlyPerformanceList[fund.monthlyPerformanceList.length - 3].performanceListByMonth
+            ];
+        this.data = fund.monthlyPerformanceList[fund.monthlyPerformanceList.length - 1].performanceListByMonth;
         this.fundlabel = fund.name + ' ( ' + fund.isinNumber + ' )';
         this.updateOptions();
 
-        //SUM RED
-        this.dataPerfChart = [parseInt(fund.performanceActualMinus6) || 100, parseInt(fund.performanceActualMinus5) || 100, parseInt(fund.performanceActualMinus4) || 100, parseInt(fund.performanceActualMinus3) || 100, parseInt(fund.performanceActualMinus2) || 100, parseInt(fund.performanceActualMinus1) || 100];
-        this.performanceSum = parseInt(fund.performanceActualMinus6) + parseInt(fund.performanceActualMinus5) + parseInt(fund.performanceActualMinus4) + parseInt(fund.performanceActualMinus3) + parseInt(fund.performanceActualMinus2) + parseInt(fund.performanceActualMinus1);
-        this.lineRed(this.gradientChartOptionsConfigurationWithTooltipRed);
+        //SUM RED    
+        this.dataPerfChart = fund.monthlyPerformanceList[fund.monthlyPerformanceList.length - 1].performanceListByMonth.slice(Math.max(12 - 5, 1));
+        this.performanceSum = Math.round(this.dataPerfChart.reduce(reducer) * 100) / 100;
+        this.updateRedChart();
 
         //VOLATILITY BLUE     
-        this.dataVolatilityChart = this.dataPerfChart;
-        this.volatilitySum = this.performanceSum
+        this.dataVolatilityChart = fund.volatilityArray.map(x => parseInt(x));
+        this.volatilitySum = Math.round(this.dataVolatilityChart.reduce(reducer) * 100) / 100;
         this.updateBlueChart();
 
         //SHARPE GREEN
-        this.dataSharpeChart = this.dataPerfChart;
-        this.sharpeSum = this.performanceSum
+        this.dataSharpeChart = fund.sharpRateArray.map(x => parseInt(x));
+        this.sharpeSum = Math.round(this.dataSharpeChart.reduce(reducer) * 100) / 100;
         this.updateGreenChart();
-
-
 
     }
 

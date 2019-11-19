@@ -1,0 +1,134 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-lg-12 col-md-12">
+
+      <div *ngIf="selectedFund !== undefined" class="card ">
+        <div class="card-header">
+          <h2 class="card-title">Fund datas</h2>
+          <select (change)="rowSelected($event.target.value)">
+            <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
+          </select>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table tablesorter table-hover" id="">
+              <thead class=" text-primary">
+                <tr>
+                  <th class="text-center"> Year </th>
+                  <th class="text-center"> Jan </th>
+                  <th class="text-center"> Feb </th>
+                  <th class="text-center"> Mar </th>
+                  <th class="text-center"> Apr </th>
+                  <th class="text-center"> May </th>
+                  <th class="text-center"> Jun </th>
+                  <th class="text-center"> Jul </th>
+                  <th class="text-center"> Aug </th>
+                  <th class="text-center"> Sep </th>
+                  <th class="text-center"> Oct </th>
+                  <th class="text-center"> Nov </th>
+                  <th class="text-center"> Dec </th>
+                  <th class="text-center">     </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let month of selectedFund.monthlyPerformanceList; let i = index">
+                  <td class="text-center">{{month.year}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[0]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[1]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[2]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[3]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[4]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[5]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[6]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[7]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[8]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[9]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[10]}} </td>
+                  <td class="text-center">{{month.performanceListByMonth[11]}} </td>
+                  <td class="text-center">{{month.performance}} </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class=" card">
+          <div class=" card-header">
+            <h4 class=" card-title">Simple Table</h4>
+          </div>
+          <div class=" card-body">
+            <div class=" table-responsive">
+              <table class=" table tablesorter" id="">
+                <thead class=" text-primary">
+                  <tr>
+                    <th class="text-center">  </th>
+                    <th class="text-center"> YTD </th>
+                    <th class="text-center"> 6 month </th>
+                    <th class="text-center"> 1 year </th>
+                    <th class="text-center"> 3 year </th>
+                    <th class="text-center"> 5 year </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <!--*ngFor="let vol of selectedFund.volatilityArray; let i = index">-->
+                    <td>Volatility</td>
+                    <td class="text-center">{{selectedFund.volatilityArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.volatilityArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.volatilityArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.volatilityArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.volatilityArray[4]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Sharpe</td>
+                    <td class="text-center">{{selectedFund.sharpRateArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.sharpRateArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.sharpRateArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.sharpRateArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.sharpRateArray[4]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Worst month</td>
+                    <td class="text-center">{{selectedFund.worstMonthArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.worstMonthArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.worstMonthArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.worstMonthArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.worstMonthArray[4]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Best month</td>
+                    <td class="text-center">{{selectedFund.bestMonthArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.bestMonthArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.bestMonthArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.bestMonthArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.bestMonthArray[4]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Max loss</td>
+                    <td class="text-center">{{selectedFund.maxLossArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.maxLossArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.maxLossArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.maxLossArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.maxLossArray[4]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Overfulfilment</td>
+                    <td class="text-center">{{selectedFund.overFulFilmentArray[0]}}</td>
+                    <td class="text-center">{{selectedFund.overFulFilmentArray[1]}}</td>
+                    <td class="text-center">{{selectedFund.overFulFilmentArray[2]}}</td>
+                    <td class="text-center">{{selectedFund.overFulFilmentArray[3]}}</td>
+                    <td class="text-center">{{selectedFund.overFulFilmentArray[4]}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

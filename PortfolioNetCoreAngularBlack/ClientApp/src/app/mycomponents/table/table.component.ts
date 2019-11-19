@@ -84,8 +84,8 @@ export class TableComponent implements OnInit {
     }
 
     rowSelected(fund: Fund) {
-        this.selectedFund = fund;
-        console.log(this.selectedFund);
+        this.selectedFund = fund;    
+        //console.log(this.selectedFund);
         this.tablefundemit.emit(this.selectedFund);
     }
 

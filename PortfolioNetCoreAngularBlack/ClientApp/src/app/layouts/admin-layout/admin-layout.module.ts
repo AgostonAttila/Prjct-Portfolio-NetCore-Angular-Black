@@ -18,8 +18,13 @@ import { TypographyComponent } from "../../pages/typography/typography.component
 import { TableComponent } from '../../mycomponents/table/table.component';
 import { LineChartComponent } from '../../mycomponents/line-chart/line-chart.component';
 import { BarChartComponent } from '../../mycomponents/bar-chart/bar-chart.component';
+import { CompareComponent } from '../../mycomponents/compare/compare.component';
+import { FundDetailComponent } from '../../mycomponents/fund-detail/fund-detail.component';
+
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+
+
 
 @NgModule({
     imports: [
@@ -38,6 +43,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
         NotificationsComponent,
         MapComponent,
         TableComponent,
+        CompareComponent,
+        FundDetailComponent,
         LineChartComponent,
         BarChartComponent
         // RtlComponent
