@@ -2,3 +2,8 @@
   overflow-y: hidden;
   overflow-y: auto;
 }
+
+table tr.highlight {
+  background-color: #999393 !important;
+  color: #ffffff;
+}

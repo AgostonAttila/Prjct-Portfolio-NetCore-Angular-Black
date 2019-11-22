@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit  {
 
     updateFund()
     {
+        //class="table-active"
         if (this.fundList !== undefined) {
             this.selectedFund = this.fundList[0];
             this.changeSelectedFund(this.selectedFund)

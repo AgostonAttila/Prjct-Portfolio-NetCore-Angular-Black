@@ -33,7 +33,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let fund of fundList; let i = index">
+              <tr *ngFor="let fund of fundList; let i = index"
+                  [ngClass] = "{'highlight' : selectedFund !== undefined && fund.isinNumber == selectedFund.isinNumber}">
                 <td (click)="rowSelected(fund)">{{i+1}} </td>          
                 <td> {{fund.isinNumber}} </td>
                 <td> {{fund.name}} </td>

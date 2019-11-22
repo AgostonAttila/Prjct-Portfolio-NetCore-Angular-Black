@@ -19,7 +19,7 @@ export class TableComponent implements OnInit {
     teststring: any;
     public message: string;
     public Files: string[];
-    selectedFund: Fund;
+    public selectedFund: Fund;
 
     actualYear = (new Date()).getFullYear()
 
