@@ -1,1 +1,4 @@
-
+.table-responsive {
+  overflow-y: hidden;
+  overflow-y: auto;
+}

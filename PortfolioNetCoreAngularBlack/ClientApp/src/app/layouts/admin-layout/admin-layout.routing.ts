@@ -15,6 +15,7 @@ import { FundDetailComponent } from '../../mycomponents/fund-detail/fund-detail.
 export const AdminLayoutRoutes: Routes = [
     { path: "dashboard", component: DashboardComponent },
     { path: "detail", component: FundDetailComponent },
+    { path: "compare", component: CompareComponent },
     { path: "icons", component: IconsComponent },
     { path: "maps", component: MapComponent },
     { path: "notifications", component: NotificationsComponent },

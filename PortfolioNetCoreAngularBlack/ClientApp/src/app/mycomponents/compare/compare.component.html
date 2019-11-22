@@ -1,58 +1,60 @@
 <div class=" content">
   <div class=" row">
-    <div class="col-lg-12 col-md-12">     
 
-      <div *ngIf="selectedFund !== undefined" class="card ">
-        <div class="card-header">
-          <h2 class="card-title">Fund datas</h2>
-          <select (change)="rowSelected($event.target.value)">
-            <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
-          </select>
+
+
+
+    <div class=" row">
+      <div class=" col-lg-12">
+        <div class=" card">
+          <div class=" card-header"><h5 class=" title">Chart</h5></div>
+          <div class=" card-body">
+            <div class=" chart-area"><canvas id="myChart"> </canvas></div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table tablesorter table-hover" id="">
-              <thead class=" text-primary">
-                <tr>
-                  <th class="text-center"> Year </th>
-                  <th class="text-center"> Jan </th>
-                  <th class="text-center"> Feb </th>
-                  <th class="text-center"> Mar </th>
-                  <th class="text-center"> Apr </th>
-                  <th class="text-center"> May </th>
-                  <th class="text-center"> Jun </th>
-                  <th class="text-center"> Jul </th>
-                  <th class="text-center"> Aug </th>
-                  <th class="text-center"> Sep </th>
-                  <th class="text-center"> Oct </th>
-                  <th class="text-center"> Nov </th>
-                  <th class="text-center"> Dec </th>
-                  <th class="text-center">     </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let month of selectedFund.monthlyPerformanceList; let i = index">
-                  <td class="text-center">{{month.year}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[0]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[1]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[2]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[3]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[4]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[5]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[6]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[7]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[8]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[9]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[10]}} </td>
-                  <td class="text-center">{{month.performanceListByMonth[11]}} </td>
-                  <td class="text-center">{{month.performance}} </td>
-                </tr>
-              </tbody>
-            </table>
+      </div>
+    </div>
+
+
+    <div class=" row">
+      <div class=" col-lg-12">
+        <div class=" card">
+          <div class=" card-header"><h5 class=" title">Chart</h5></div>
+          <div class=" card-body">
+            <div id="container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+
+
+
+
+    <div class=" row">
+      <div class=" col-lg-6 col-md-6">
+        <div class=" card">
+          <div class=" card-header"><h5 class=" title">Properties</h5></div>
+          <div class=" card-body">
+            <select (change)="rowSelected1($event.target.value)">
+              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
+            </select>
           </div>
         </div>
       </div>
 
+      <div class=" col-lg-6 col-md-6">
+        <div class=" card">
+          <div class=" card-header"><h5 class=" title">Properties</h5></div>
+          <div class=" card-body">
+            <select (change)="rowSelected2($event.target.value)">
+              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
-</div>
+  </div>
