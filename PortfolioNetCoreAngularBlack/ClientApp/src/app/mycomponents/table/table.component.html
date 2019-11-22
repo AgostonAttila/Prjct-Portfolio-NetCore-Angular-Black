@@ -34,8 +34,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let fund of fundList; let i = index"
+                  (click)="rowSelected(fund)"
                   [ngClass] = "{'highlight' : selectedFund !== undefined && fund.isinNumber == selectedFund.isinNumber}">
-                <td (click)="rowSelected(fund)">{{i+1}} </td>          
+                <td >{{i+1}} </td>          
                 <td> {{fund.isinNumber}} </td>
                 <td> {{fund.name}} </td>
                 <td> {{fund.currency}} </td>

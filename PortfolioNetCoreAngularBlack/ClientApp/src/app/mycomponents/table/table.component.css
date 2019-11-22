@@ -7,3 +7,11 @@ table tr.highlight {
   background-color: #999393 !important;
   color: #ffffff;
 }
+
+table tr{
+
+  cursor: pointer;
+}
+
+
+
