@@ -21,6 +21,7 @@ import { BarChartComponent } from '../../mycomponents/bar-chart/bar-chart.compon
 import { CompareComponent } from '../../mycomponents/compare/compare.component';
 import { FundDetailComponent } from '../../mycomponents/fund-detail/fund-detail.component';
 
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
@@ -33,6 +34,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
         FormsModule,
         HttpClientModule,
         NgbModule,
+        HighchartsChartModule
     ],
     declarations: [
         DashboardComponent,
@@ -46,7 +48,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
         CompareComponent,
         FundDetailComponent,
         LineChartComponent,
-        BarChartComponent
+        BarChartComponent        
         // RtlComponent
     ]
 })

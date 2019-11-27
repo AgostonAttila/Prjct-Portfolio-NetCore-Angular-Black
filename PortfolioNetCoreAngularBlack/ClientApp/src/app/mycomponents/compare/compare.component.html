@@ -1,34 +1,19 @@
 <div class=" content">
-  <div class=" row">
 
 
 
 
-    <div class=" row">
-      <div class=" col-lg-12">
-        <div class=" card">
-          <div class=" card-header"><h5 class=" title">Chart</h5></div>
-          <div class=" card-body">
-            <div class=" chart-area"><canvas id="myChart"> </canvas></div>
-          </div>
+
+    <!--<div class=" row">
+    <div class=" col-lg-12">
+      <div class=" card">
+        <div class=" card-header"><h5 class=" title">Chart</h5></div>
+        <div class=" card-body">
+          <div class=" chart-area"><canvas id="myChart"> </canvas></div>
         </div>
       </div>
     </div>
-
-
-    <div class=" row">
-      <div class=" col-lg-12">
-        <div class=" card">
-          <div class=" card-header"><h5 class=" title">Chart</h5></div>
-          <div class=" card-body">
-            <div id="container"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-   
-
+  </div>-->
 
 
 
@@ -38,7 +23,7 @@
           <div class=" card-header"><h5 class=" title">Properties</h5></div>
           <div class=" card-body">
             <select (change)="rowSelected1($event.target.value)">
-              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
+              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}} ( {{fund.isinNumber}} )</option>
             </select>
           </div>
         </div>
@@ -49,12 +34,36 @@
           <div class=" card-header"><h5 class=" title">Properties</h5></div>
           <div class=" card-body">
             <select (change)="rowSelected2($event.target.value)">
-              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}}</option>
+              <option *ngFor="let fund of fundList" value={{fund.isinNumber}}>{{fund.name}} ( {{fund.isinNumber}} )</option>
             </select>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-  </div>
+    <div class=" row">
+      <div class=" col-lg-12">
+        <div *ngIf="charts != undefined">
+          <div class=" card">
+            <div class=" card-header">
+              <h5 class=" title">Chart</h5>
+            </div>
+            <div class=" card-body">
+
+              <highcharts-chart [Highcharts]="Highcharts"
+                                [constructorType]="'stockChart'"
+                                [options]="charts[usedIndex].hcOptions"
+                                [callbackFunction]="charts[0].hcCallback"
+                                [(update)]="updateDemo2"
+                                style="width: 100%; height: 800px;"></highcharts-chart>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    </div>

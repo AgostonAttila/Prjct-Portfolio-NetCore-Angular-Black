@@ -22,29 +22,30 @@ import { FundService } from './services/fund.service';
 import { FileService } from './services/file.service';
 
 
+
 @NgModule({
-  imports: [
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    ComponentsModule,
-    NgbModule,
-    RouterModule,
-    AppRoutingModule,
-    ApiAuthorizationModule,
-    ToastrModule.forRoot(),
-    //RouterModule.forRoot([
-    //  { path: '', component: HomeComponent, pathMatch: 'full' },
-    //  { path: 'counter', component: CounterComponent },
-    //  { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-    //])
-  ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
-  providers: [
-     // { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-      FundService,
-      FileService 
-  ],
-  bootstrap: [AppComponent]
+    imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpClientModule,
+        ComponentsModule,
+        NgbModule,
+        RouterModule,
+        AppRoutingModule,
+        ApiAuthorizationModule,
+        ToastrModule.forRoot()        
+        //RouterModule.forRoot([
+        //  { path: '', component: HomeComponent, pathMatch: 'full' },
+        //  { path: 'counter', component: CounterComponent },
+        //  { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+        //])
+    ],
+    declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
+    providers: [
+        // { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+        FundService,
+        FileService
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

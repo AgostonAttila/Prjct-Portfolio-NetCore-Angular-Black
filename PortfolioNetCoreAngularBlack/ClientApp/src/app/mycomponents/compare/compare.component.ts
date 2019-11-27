@@ -1,51 +1,51 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FundService } from '../../services/fund.service';
 import { HttpClient } from '@angular/common/http';
 import { Fund } from '../../models/fund';
-import Chart from 'chart.js';
 
-
-import * as Highcharts from 'highcharts/highstock';
+import * as Highcharts from 'highcharts';
 
 
 
+import StockModule from 'highcharts/modules/stock';
+//import MapModule from 'highcharts/modules/map';
+//import GanttModule from 'highcharts/modules/gantt';
+import ExportingModule from 'highcharts/modules/exporting';
+
+StockModule(Highcharts);
+//MapModule(Highcharts);
+//GanttModule(Highcharts);
+ExportingModule(Highcharts);
 
 @Component({
     selector: 'app-compare',
     templateUrl: './compare.component.html',
     styleUrls: ['./compare.component.scss']
 })
-export class CompareComponent implements OnInit {
+export class CompareComponent {
 
     fundList: any;
     error: any;
     selectedFund1: Fund;
-    selectedFund2: Fund;
-
-    public canvas: any;
-    public ctx;
-    public myChart;
-
-
-    monthMainChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUL', 'JUN', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    data = [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3];
-    max = 10;
-    min = -10;
-      
+    selectedFund2: Fund;    
 
     constructor(private service: FundService, private http: HttpClient) {
         service.getFundList().subscribe(
             res => {
-                this.fundList = res
+                this.fundList = res;
+                this.updateFund();
             }, // success path
             error => { this.error = error, console.log('rossz'), console.log(this.error) } // error path
         );
     }
 
-
-    ngOnInit() {
-        this.lineRed(this.gradientChartOptionsConfigurationWithTooltipRed);               
-    }
+    Highcharts: typeof Highcharts = Highcharts; // Highcharts, it's Highcharts   
+    updateDemo2: boolean = false;
+    usedIndex: number = 0;
+    chartTitle: string = 'Compare'; // for init - change through titleChange   
+    charts = undefined;
+   
+   
 
 
     rowSelected1(isinNumber: string) {
@@ -55,100 +55,16 @@ export class CompareComponent implements OnInit {
 
     rowSelected2(isinNumber: string) {
         this.selectedFund2 = this.fundList.find(x => x.isinNumber === isinNumber);
-        this.updateOptions();
-    }
+        this.updateOptions();    }
 
-
-
-    public barBlue(gradientBarChartConfiguration) {
-        this.canvas = document.getElementById("myChart");
-        this.ctx = this.canvas.getContext("2d");
-        var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
-
-        gradientStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
-        gradientStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
-        gradientStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
-
-
-        this.myChart = new Chart(this.ctx, {
-            type: 'bar',
-            responsive: true,
-            legend: {
-                display: false
-            },
-            data: {
-                labels: this.monthMainChartLabels,
-                datasets: [{
-                    label: 'Data',
-                    fill: true,
-                    backgroundColor: gradientStroke,
-                    hoverBackgroundColor: gradientStroke,
-                    borderColor: '#1f8ef1',
-                    borderWidth: 2,
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    data: this.data,
-                }
-                ]
-            },
-            options: gradientBarChartConfiguration
-        });
-    }
-
-    public lineRed(gradientBarChartConfiguration) {
-        this.canvas = document.getElementById("myChart");
-        this.ctx = this.canvas.getContext("2d");
-
-        var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
-
-        gradientStroke.addColorStop(1, 'rgba(233,32,16,0.2)');
-        gradientStroke.addColorStop(0.4, 'rgba(233,32,16,0.0)');
-        gradientStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors
-
-        var data = {
-            labels: this.monthMainChartLabels,
-            datasets: [{
-                label: 'Data',
-                fill: true,
-                backgroundColor: gradientStroke,
-                borderColor: '#ec250d',
-                borderWidth: 2,
-                borderDash: [],
-                borderDashOffset: 0.0,
-                pointBackgroundColor: '#ec250d',
-                pointBorderColor: 'rgba(255,255,255,0)',
-                pointHoverBackgroundColor: '#ec250d',
-                pointBorderWidth: 20,
-                pointHoverRadius: 4,
-                pointHoverBorderWidth: 15,
-                pointRadius: 4,
-                data: this.data,
-            },
-            {
-                label: 'Data',
-                fill: true,
-                backgroundColor: gradientStroke,
-                borderColor: '#ec250d',
-                borderWidth: 2,
-                borderDash: [],
-                borderDashOffset: 0.0,
-                pointBackgroundColor: '#ec250d',
-                pointBorderColor: 'rgba(255,255,255,0)',
-                pointHoverBackgroundColor: '#ec250d',
-                pointBorderWidth: 20,
-                pointHoverRadius: 4,
-                pointHoverBorderWidth: 15,
-                pointRadius: 4,
-                data: this.data,
-            }]
-        };
-
-        this.myChart = new Chart(this.ctx, {
-            type: 'line',
-            data: data,
-            options: gradientBarChartConfiguration
-        });
-    }
+    updateFund() {
+        //class="table-active"
+        if (this.fundList !== undefined) {
+            this.selectedFund1 = this.fundList[0];
+            this.selectedFund2 = this.fundList[1];
+            this.updateOptions();
+        }
+    }    
 
     public updateOptions() {
 
@@ -162,10 +78,9 @@ export class CompareComponent implements OnInit {
             let minYear = Math.min.apply(Math, [monthly1[0].year, monthly2[0].year]);
             let maxYear = Math.max.apply(Math, [monthly1[monthly1.length - 1].year, monthly2[monthly2.length - 1].year]);
 
-            let mainChartLabels = [];
-            for (var i = minYear; i < maxYear; i++)
-                mainChartLabels = mainChartLabels.concat(this.monthMainChartLabels)
-            // this.mainChartLabels.push(i.toString())
+            //let mainChartLabels = [];
+            //for (var i = minYear; i < maxYear; i++)
+            //    mainChartLabels = mainChartLabels.concat(this.monthMainChartLabels)       
 
             let data1 = [];
             let data2 = [];
@@ -184,71 +99,65 @@ export class CompareComponent implements OnInit {
                     data2 = data2.concat(emptyArray)
             }
 
-            this.myChart.data.datasets[0].data = data1;
-            this.myChart.data.datasets[1].data = data2;
-            this.myChart.options.scales.yAxes[0].ticks.suggestedMin = Math.max.apply(Math, data1);
-            this.myChart.options.scales.yAxes[0].ticks.suggestedMax = Math.min.apply(Math, data1);
-            this.myChart.data.labels = mainChartLabels;
-            this.myChart.update();
+            let startYear = minYear;
+            let month = 1;
+
+            var withDateData1 = [];
+            for (var k = 0; k < data1.length; k++) {            
+                withDateData1.push([Date.UTC(startYear, month, 1), data1[k]]);             
+                //withDateData1.push([Math.round(new Date(startYear.toString() + "/" + month + "/01 01:01:00").getTime() / 1000), data1[k]]);
+                
+                if (month === 12) { startYear++; month = 0 };
+
+                month++;
+            }
+
+            startYear = minYear;
+            month = 1;
+
+            var withDateData2 = [];
+            for (var k = 0; k < data2.length; k++) {             
+                withDateData2.push([Date.UTC(startYear, month, 1), data2[k]]);
+                //withDateData2.push([Math.round(new Date(startYear.toString() + "/" + month + "/01 01:01:00").getTime() / 1000), data2[k]]);
+
+                if (month === 12) { startYear++; month = 0 };
+
+                month++
+            }
+
+            this.charts = [{
+                hcOptions: {
+                    title: { text: this.chartTitle },
+                    //subtitle: { text: '1st data set' },
+                    //plotOptions: {
+                    //    series: {
+                    //        pointStart: Math.round(new Date(minYear.toString() + "/01/01 01:01:00").getTime() / 1000),
+                    //        pointInterval: 86400000 * 30 // 1 day
+                    //    }
+                    //},
+                    series: [
+                        {
+                            type: 'line',
+                            name: this.selectedFund1.isinNumber,
+                            data: withDateData1,
+                            threshold: 5,
+                            negativeColor: 'red',
+                            events: {
+                                dblclick: function () {
+                                    console.log('dblclick - thanks to the Custom Events plugin');
+                                }
+                            }
+                        },
+                        {
+                            type: 'line',
+                            data: withDateData2,
+                            name: this.selectedFund2.isinNumber,
+                        }
+                    ]
+                } as Highcharts.Options,
+                hcCallback: (chart: Highcharts.Chart) => { console.log('some variables: ', Highcharts, chart, this.charts); }
+            }]; 
         }
     }
-
-
-
-
-
-
-
-    gradientChartOptionsConfigurationWithTooltipRed: any = {
-        maintainAspectRatio: false,
-        legend: {
-            display: false
-        },
-
-        tooltips: {
-            backgroundColor: '#f5f5f5',
-            titleFontColor: '#333',
-            bodyFontColor: '#666',
-            bodySpacing: 4,
-            xPadding: 12,
-            mode: "nearest",
-            intersect: 0,
-            position: "nearest"
-        },
-        responsive: true,
-        scales: {
-            yAxes: [{
-                barPercentage: 1.6,
-                gridLines: {
-                    drawBorder: false,
-                    color: 'rgba(29,140,248,0.0)',
-                    zeroLineColor: "transparent",
-                },
-                ticks: {
-                    suggestedMin: this.min,
-                    suggestedMax: this.max,
-                    padding: 1,
-                    fontColor: "#9a9a9a"
-                }
-            }],
-
-            xAxes: [{
-                barPercentage: 1.6,
-                gridLines: {
-                    drawBorder: false,
-                    color: 'rgba(233,32,16,0.1)',
-                    zeroLineColor: "transparent",
-                },
-                ticks: {
-                    padding: 20,
-                    fontColor: "#9a9a9a"
-                }
-            }]
-        }
-    };
-
-
-
-  
 
 }
