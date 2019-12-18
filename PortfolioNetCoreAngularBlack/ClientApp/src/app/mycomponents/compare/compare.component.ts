@@ -27,7 +27,7 @@ export class CompareComponent {
     fundList: any;
     error: any;
     selectedFund1: Fund;
-    selectedFund2: Fund;    
+    selectedFund2: Fund;
 
     constructor(private service: FundService, private http: HttpClient) {
         service.getFundList().subscribe(
@@ -44,8 +44,8 @@ export class CompareComponent {
     usedIndex: number = 0;
     chartTitle: string = 'Compare'; // for init - change through titleChange   
     charts = undefined;
-   
-   
+
+
 
 
     rowSelected1(isinNumber: string) {
@@ -55,7 +55,8 @@ export class CompareComponent {
 
     rowSelected2(isinNumber: string) {
         this.selectedFund2 = this.fundList.find(x => x.isinNumber === isinNumber);
-        this.updateOptions();    }
+        this.updateOptions();
+    }
 
     updateFund() {
         //class="table-active"
@@ -64,11 +65,12 @@ export class CompareComponent {
             this.selectedFund2 = this.fundList[1];
             this.updateOptions();
         }
-    }    
+    }
 
     public updateOptions() {
 
-        let emptyArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let zeroArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let nullArray = [null, null, null, null, null, null, null, null, null, null, null, null];
 
         if (this.selectedFund2 !== undefined && this.selectedFund1 != undefined) {
 
@@ -85,44 +87,58 @@ export class CompareComponent {
             let data1 = [];
             let data2 = [];
 
+            //Concat monthly vectors
             for (var i = minYear; i < maxYear; i++) {
                 let element = monthly1.find(x => x.year === i.toString());
                 if (element !== undefined)
                     data1 = data1.concat(element.performanceListByMonth)
                 else
-                    data1 = data1.concat(emptyArray)
+                    data1 = data1.concat(nullArray)
 
                 let element2 = monthly2.find(x => x.year === i.toString());
                 if (element2 !== undefined)
                     data2 = data2.concat(element2.performanceListByMonth)
                 else
-                    data2 = data2.concat(emptyArray)
+                    data2 = data2.concat(nullArray)
             }
 
+            ////Replace nulls
+            //for (var k = 0; k < data1.length; k++) {
+            //    if (data1[k] === null) data1[k] = 1;
+            //    if (data2[k] === null) data2[k] = 1;
+            //}
+
+            //Calculate cummulated matrix
+            for (var k = 1; k < data1.length; k++) {
+
+                if (data1[k - 1] === null)
+                    data1[k - 1] = 1;
+
+                if (data2[k - 1] === null)
+                    data2[k - 1] = 1;
+
+                data1[k] = data1[k - 1] * (1 + data1[k] / 100);
+
+                data2[k] = data2[k - 1] * (1 + data2[k] / 100);
+            }
+
+            //Convert to chart format
             let startYear = minYear;
             let month = 1;
-
             var withDateData1 = [];
-            for (var k = 0; k < data1.length; k++) {            
-                withDateData1.push([Date.UTC(startYear, month, 1), data1[k]]);             
-                //withDateData1.push([Math.round(new Date(startYear.toString() + "/" + month + "/01 01:01:00").getTime() / 1000), data1[k]]);
-                
-                if (month === 12) { startYear++; month = 0 };
-
-                month++;
-            }
-
-            startYear = minYear;
-            month = 1;
-
             var withDateData2 = [];
-            for (var k = 0; k < data2.length; k++) {             
-                withDateData2.push([Date.UTC(startYear, month, 1), data2[k]]);
+
+            for (var k = 0; k < data1.length; k++) {
+
+                withDateData1.push([Date.UTC(startYear, month, 1), Math.round(data1[k] * 100) / 100]);
+                withDateData2.push([Date.UTC(startYear, month, 1), Math.round(data2[k] * 100) / 100]);
+
+                //withDateData1.push([Math.round(new Date(startYear.toString() + "/" + month + "/01 01:01:00").getTime() / 1000), data1[k]]);
                 //withDateData2.push([Math.round(new Date(startYear.toString() + "/" + month + "/01 01:01:00").getTime() / 1000), data2[k]]);
 
                 if (month === 12) { startYear++; month = 0 };
 
-                month++
+                month++;
             }
 
             this.charts = [{
@@ -140,23 +156,24 @@ export class CompareComponent {
                             type: 'line',
                             name: this.selectedFund1.isinNumber,
                             data: withDateData1,
-                            threshold: 5,
-                            negativeColor: 'red',
-                            events: {
-                                dblclick: function () {
-                                    console.log('dblclick - thanks to the Custom Events plugin');
-                                }
-                            }
+                            //threshold: 5,
+                            //negativeColor: 'red',
+                            //events: {
+                            //    dblclick: function () {
+                            //        console.log('dblclick - thanks to the Custom Events plugin');
+                            //    }
+                            //}
                         },
                         {
                             type: 'line',
                             data: withDateData2,
                             name: this.selectedFund2.isinNumber,
                         }
+
                     ]
                 } as Highcharts.Options,
                 hcCallback: (chart: Highcharts.Chart) => { console.log('some variables: ', Highcharts, chart, this.charts); }
-            }]; 
+            }];
         }
     }
 
